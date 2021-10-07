@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from streamstatus.companion import Companion
 from streamstatus.spx_gc import SpxGc
@@ -19,7 +19,9 @@ def index():
     spx = SpxGc(pi_host)
     response += f'<br>{spx}: {spx.get_is_healthy()}'
 
-    return response
+    apps = [comp, tally_arbiter, spx]
+
+    return render_template("index.html", apps=apps)
 
 
 if __name__ == "__main__":
