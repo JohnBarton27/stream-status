@@ -13,10 +13,8 @@ class SpxGc(Application):
         return 'SPX-GC'
 
     def get_is_healthy(self):
-        url = f'http://{self.hostname}:{self.port}'
-
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(self.url, timeout=5)
         except OSError:
             return False
 

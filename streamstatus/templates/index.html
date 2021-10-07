@@ -12,8 +12,13 @@
 
 <body>
   <h1>Stream Status</h1>
+  <h2>Core Applications</h2>
   {% for app in apps %}
-    <p>{{ app }}: {{app.get_is_healthy()}}</p>
+    <a href="{{app.url}}" target="_blank">
+      <div class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}">
+        {{ app }}
+      </div>
+    </a>
   {% endfor %}
 </body>
 

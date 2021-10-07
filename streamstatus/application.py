@@ -18,6 +18,10 @@ class Application(ABC):
     def app_name(self):
         pass
 
+    @property
+    def url(self):
+        return f'http://{self.hostname}:{self.port}'
+
     @abstractmethod
     def get_is_healthy(self):
         pass
