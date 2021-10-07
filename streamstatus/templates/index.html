@@ -15,11 +15,33 @@
   <h2>Core Applications</h2>
   {% for app in apps %}
     <a href="{{app.url}}" target="_blank">
-      <div class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}">
+      <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}">
         {{ app }}
       </div>
     </a>
   {% endfor %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    socket.on('connect', function() {
+        socket.emit('get_statuses');
+    });
+
+    socket.on('broadcast',function(data){
+      for (const [app, status] of Object.entries(data)) {
+        console.log(app, status);
+        let app_elem = document.getElementById(app);
+        if (status && app_elem.classList.contains('app-unhealthy')) {
+          app_elem.classList.remove('app-unhealthy');
+          app_elem.classList.add('app-healthy');
+        } else if (!status && app_elem.classList.contains('app-healthy')) {
+          app_elem.classList.add('app-unhealthy');
+          app_elem.classList.remove('app-healthy');
+        }
+      }
+    });
+</script>
 </body>
 
 </html>

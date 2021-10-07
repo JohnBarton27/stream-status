@@ -1,27 +1,37 @@
 from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
+import time
 
 from streamstatus.companion import Companion
 from streamstatus.spx_gc import SpxGc
 from streamstatus.tally_arbiter import TallyArbiter
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
+
 pi_host = '192.168.2.51'
+comp = Companion(pi_host)
+tally_arbiter = TallyArbiter(pi_host)
+spx = SpxGc(pi_host)
+
+apps = [comp, tally_arbiter, spx]
 
 
 @app.route("/")
 def index():
-    comp = Companion(pi_host)
-    response = f'{comp}: {comp.get_is_healthy()}'
-
-    tally_arbiter = TallyArbiter(pi_host)
-    response += f'<br>{tally_arbiter}: {tally_arbiter.get_is_healthy()}'
-
-    spx = SpxGc(pi_host)
-    response += f'<br>{spx}: {spx.get_is_healthy()}'
-
-    apps = [comp, tally_arbiter, spx]
-
     return render_template("index.html", apps=apps)
+
+
+@socketio.on('get_statuses')
+def handle_my_custom_event():
+    while True:
+        data = {}
+        for application in apps:
+            data[application.app_name] = application.get_is_healthy()
+        print(data)
+        emit('broadcast', data, broadcast=True)
+        time.sleep(2)
 
 
 if __name__ == "__main__":
