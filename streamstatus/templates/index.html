@@ -30,7 +30,6 @@
 
     socket.on('broadcast',function(data){
       for (const [app, status] of Object.entries(data)) {
-        console.log(app, status);
         let app_elem = document.getElementById(app);
         if (status && app_elem.classList.contains('app-unhealthy')) {
           app_elem.classList.remove('app-unhealthy');

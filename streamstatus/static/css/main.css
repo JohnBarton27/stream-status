@@ -28,4 +28,10 @@ a {
 .app-unhealthy {
     background-color: red;
     color: white;
+    animation: blinkingBackground 1s infinite;
+}
+
+@keyframes blinkingBackground{
+    0%		{ background-color: red;}
+    50%		{ background-color: black;}
 }
