@@ -5,6 +5,9 @@ from streamstatus.application import Application
 
 class TallyArbiter(Application):
 
+    def __init__(self, hostname: str, port: int = 4455):
+        super().__init__(hostname, port)
+
     @property
     def app_name(self):
         return 'Tally Arbiter'

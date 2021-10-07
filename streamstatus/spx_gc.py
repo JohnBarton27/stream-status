@@ -3,14 +3,14 @@ import requests
 from streamstatus.application import Application
 
 
-class Companion(Application):
+class SpxGc(Application):
 
-    def __init__(self, hostname: str, port: int = 8000):
+    def __init__(self, hostname: str, port: int = 5000):
         super().__init__(hostname, port)
 
     @property
     def app_name(self):
-        return 'Companion'
+        return 'SPX-GC'
 
     def get_is_healthy(self):
         url = f'http://{self.hostname}:{self.port}'

@@ -1,18 +1,23 @@
 from flask import Flask
 
 from streamstatus.companion import Companion
+from streamstatus.spx_gc import SpxGc
 from streamstatus.tally_arbiter import TallyArbiter
 
 app = Flask(__name__)
+pi_host = '192.168.2.51'
 
 
 @app.route("/")
 def index():
-    comp = Companion('192.168.2.51', 8000)
+    comp = Companion(pi_host)
     response = f'{comp}: {comp.get_is_healthy()}'
 
-    tally_arbiter = TallyArbiter('192.168.2.51', 4455)
+    tally_arbiter = TallyArbiter(pi_host)
     response += f'<br>{tally_arbiter}: {tally_arbiter.get_is_healthy()}'
+
+    spx = SpxGc(pi_host)
+    response += f'<br>{spx}: {spx.get_is_healthy()}'
 
     return response
 
