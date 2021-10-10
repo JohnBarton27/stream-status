@@ -12,7 +12,8 @@ class Companion(Application):
     def app_name(self):
         return 'Companion'
 
-    def get_is_healthy(self):
+    @property
+    def is_up(self):
         try:
             response = requests.get(self.url, timeout=5)
         except OSError:

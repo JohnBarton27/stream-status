@@ -13,10 +13,15 @@
 <body>
   <h1>Stream Status</h1>
   <h2>Core Applications</h2>
+  <div style="text-align: center;">
+    <span style="width: 60%; display: inline-block;">Application</span>
+    <span>Up/Down Time</span>
+  </div>
   {% for app in apps %}
     <a href="{{app.url}}" target="_blank">
-      <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}">
-        {{ app }}
+      <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
+        <span style="width: 60%; display: inline-block;">{{ app }}</span>
+        <span id="{{app.app_name}}-uptime">{{ app.uptime }}</span>
       </div>
     </a>
   {% endfor %}
@@ -29,12 +34,15 @@
     });
 
     socket.on('broadcast',function(data){
-      for (const [app, status] of Object.entries(data)) {
+      for (const [app, app_info] of Object.entries(data)) {
+        status = app_info['status'];
         let app_elem = document.getElementById(app);
-        if (status && app_elem.classList.contains('app-unhealthy')) {
-          app_elem.classList.remove('app-unhealthy');
+        let app_time_elem = document.getElementById(app + '-uptime');
+        app_time_elem.innerHTML = app_info['time'];
+        if (status == 'true' && app_elem.classList.contains('app-unhealthy')) {
           app_elem.classList.add('app-healthy');
-        } else if (!status && app_elem.classList.contains('app-healthy')) {
+          app_elem.classList.remove('app-unhealthy');
+        } else if (status == 'false' && app_elem.classList.contains('app-healthy')) {
           app_elem.classList.add('app-unhealthy');
           app_elem.classList.remove('app-healthy');
         }

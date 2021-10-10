@@ -12,7 +12,8 @@ class SpxGc(Application):
     def app_name(self):
         return 'SPX-GC'
 
-    def get_is_healthy(self):
+    @property
+    def is_up(self):
         try:
             response = requests.get(self.url, timeout=5)
         except OSError:

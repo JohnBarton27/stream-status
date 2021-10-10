@@ -10,9 +10,10 @@ class TallyArbiter(Application):
 
     @property
     def app_name(self):
-        return 'Tally Arbiter'
+        return 'Tally-Arbiter'
 
-    def get_is_healthy(self):
+    @property
+    def is_up(self):
         try:
             response = requests.get(self.url, timeout=5)
         except OSError:

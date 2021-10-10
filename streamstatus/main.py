@@ -28,7 +28,8 @@ def handle_my_custom_event():
     while True:
         data = {}
         for application in apps:
-            data[application.app_name] = application.get_is_healthy()
+            data[application.app_name] = {'status': application.get_is_healthy(), 'time': application.uptime}
+
         print(data)
         emit('broadcast', data, broadcast=True)
         time.sleep(2)
