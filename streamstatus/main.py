@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 import time
 
 from streamstatus.companion import Companion
+from streamstatus.light_factory import LightFactory
 from streamstatus.spx_gc import SpxGc
 from streamstatus.tally_arbiter import TallyArbiter
 
@@ -14,8 +15,10 @@ pi_host = '192.168.2.51'
 comp = Companion(pi_host)
 tally_arbiter = TallyArbiter(pi_host)
 spx = SpxGc(pi_host)
+gath_light_factory = LightFactory('192.168.0.104', app_name='Gathering Light Factory')
+trad_light_factory = LightFactory('192.168.3.104', app_name='Traditional Light Factory')
 
-apps = [comp, tally_arbiter, spx]
+apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 
 
 @app.route("/")

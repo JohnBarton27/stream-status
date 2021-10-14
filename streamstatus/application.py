@@ -4,9 +4,10 @@ from datetime import datetime
 
 class Application(ABC):
 
-    def __init__(self, hostname: str, port: int):
+    def __init__(self, hostname: str, port: int, app_name: str = None):
         self.hostname = hostname
         self.port = port
+        self._app_name = app_name
         self._first_healthy = None
         self._first_unhealthy = None
 
@@ -16,10 +17,13 @@ class Application(ABC):
     def __repr__(self):
         return str(self)
 
-    @property
     @abstractmethod
-    def app_name(self):
+    def _get_app_name(self):
         pass
+
+    @property
+    def app_name(self):
+        return self._app_name if self._app_name else self._get_app_name()
 
     @property
     def url(self):
