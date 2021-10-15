@@ -6,6 +6,7 @@ from streamstatus.companion import Companion
 from streamstatus.light_factory import LightFactory
 from streamstatus.spx_gc import SpxGc
 from streamstatus.tally_arbiter import TallyArbiter
+from streamstatus.stream_host.twitch import Twitch
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -18,12 +19,17 @@ spx = SpxGc(pi_host)
 gath_light_factory = LightFactory('192.168.0.104', app_name='Gathering Light Factory')
 trad_light_factory = LightFactory('192.168.3.104', app_name='Traditional Light Factory')
 
-apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
+twitch_gabz = Twitch('ChaoticGabz')
+twitch_sumc = Twitch('suntreeumc')
+
+# apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
+apps = [comp]
+streams = [twitch_gabz, twitch_sumc]
 
 
 @app.route("/")
 def index():
-    return render_template("index.html", apps=apps)
+    return render_template("index.html", apps=apps, streams=streams)
 
 
 @socketio.on('get_statuses')

@@ -26,6 +26,14 @@
     </a>
   {% endfor %}
 
+  <h2>Streams</h2>
+  {% for stream in streams %}
+  <div id="{{stream.__class__}}-{{ stream.login }}" class="app-status {% if stream.is_live %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
+      <span style="width: 60%; display: inline-block;">{{ stream.__class__.__name__ }} - {{ stream.login }}</span>
+      <span id="{{stream.__class__}}-{{ stream.login }}-viewers">{% if stream.get_current_viewers() == -1 %} Offline {% else %} {{ stream.get_current_viewers() }} {% endif %}</span>
+  </div>
+  {% endfor %}
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
     var socket = io();
