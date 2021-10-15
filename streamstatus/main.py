@@ -40,7 +40,19 @@ def handle_my_custom_event():
             data[application.app_name] = {'status': application.get_is_healthy(), 'time': application.uptime}
 
         print(data)
-        emit('broadcast', data, broadcast=True)
+        emit('broadcast-statuses', data, broadcast=True)
+        time.sleep(2)
+
+
+@socketio.on('get_viewers')
+def handle_get_viewers():
+    while True:
+        data = {}
+        for stream in streams:
+            data[str(stream)] = {'viewers': stream.get_current_viewers()}
+
+        print(data)
+        emit('broadcast-viewers', data, broadcast=True)
         time.sleep(2)
 
 

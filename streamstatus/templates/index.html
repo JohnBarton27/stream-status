@@ -30,7 +30,7 @@
   {% for stream in streams %}
   <div id="{{stream.__class__}}-{{ stream.login }}" class="app-status {% if stream.is_live %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
       <span style="width: 60%; display: inline-block;">{{ stream.__class__.__name__ }} - {{ stream.login }}</span>
-      <span id="{{stream.__class__}}-{{ stream.login }}-viewers">{% if stream.get_current_viewers() == -1 %} Offline {% else %} {{ stream.get_current_viewers() }} {% endif %}</span>
+      <span id="{{stream}}-viewers">{% if stream.get_current_viewers() == -1 %} Offline {% else %} {{ stream.get_current_viewers() }} {% endif %}</span>
   </div>
   {% endfor %}
 
@@ -39,9 +39,10 @@
     var socket = io();
     socket.on('connect', function() {
         socket.emit('get_statuses');
+        socket.emit('get_viewers');
     });
 
-    socket.on('broadcast',function(data){
+    socket.on('broadcast-statuses',function(data){
       for (const [app, app_info] of Object.entries(data)) {
         status = app_info['status'];
         let app_elem = document.getElementById(app);
@@ -55,6 +56,14 @@
           app_elem.classList.remove('app-healthy');
         }
       }
+    });
+
+    socket.on('broadcast-viewers', function(data) {
+        for (const [stream, stream_info] of Object.entries(data)) {
+            let viewers = stream_info['viewers'];
+            let viewer_elem = document.getElementById(stream + '-viewers');
+            viewer_elem.innerHTML = viewers;
+        }
     });
 </script>
 </body>

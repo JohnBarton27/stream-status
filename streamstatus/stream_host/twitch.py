@@ -9,8 +9,7 @@ from streamstatus.stream_host import StreamHost
 class Twitch(StreamHost):
 
     def __init__(self, login):
-        super().__init__()
-        self.login = login
+        super().__init__(login)
 
     @functools.cached_property
     def api(self):
