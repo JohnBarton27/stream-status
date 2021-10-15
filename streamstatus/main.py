@@ -19,12 +19,11 @@ spx = SpxGc(pi_host)
 gath_light_factory = LightFactory('192.168.0.104', app_name='Gathering Light Factory')
 trad_light_factory = LightFactory('192.168.3.104', app_name='Traditional Light Factory')
 
-twitch_gabz = Twitch('ChaoticGabz')
 twitch_sumc = Twitch('suntreeumc')
 
 # apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 apps = [comp]
-streams = [twitch_gabz, twitch_sumc]
+streams = [twitch_sumc]
 
 
 @app.route("/")
