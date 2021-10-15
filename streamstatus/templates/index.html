@@ -27,8 +27,13 @@
   {% endfor %}
 
   <h2>Streams</h2>
+  <div style="text-align: center;">
+      <span style="width: 40%; display: inline-block;">Stream</span>
+      <span style="width: 20%; display: inline-block;">Viewers</span>
+      <span style="width: 20%; display: inline-block;">Uptime</span>
+  </div>
   {% for stream in streams %}
-  <div id="{{stream.__class__}}-{{ stream.login }}" class="app-status {% if stream.is_live %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
+  <div id="{{stream.__class__.__name__}}-{{ stream.login }}" class="app-status {% if stream.is_live %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
       <span style="width: 40%; display: inline-block;">{{ stream.__class__.__name__ }} - {{ stream.login }}</span>
       <span id="{{stream}}-viewers" style="width: 20%; display: inline-block;">{% if stream.get_current_viewers() == -1 %} Offline {% else %} {{ stream.get_current_viewers() }} {% endif %}</span>
       <span id="{{stream}}-duration" style="width: 20%; display: inline-block;">{% if stream.get_stream_duration() == -1 %} Offline {% else %} {{ stream.get_stream_duration() }} {% endif %}</span>
@@ -61,21 +66,35 @@
 
     socket.on('broadcast-viewers', function(data) {
         for (const [stream, stream_info] of Object.entries(data)) {
+            let online = true;
             let viewers = stream_info['viewers'];
             if (viewers === -1) {
                 viewers = 'Offline';
+                online = false;
             }
 
             let duration = stream_info['duration'];
             if (duration === -1) {
                 duration = 'Offline';
+                online = false;
             }
+
+            let stream_elem = document.getElementById(stream);
 
             let viewer_elem = document.getElementById(stream + '-viewers');
             viewer_elem.innerHTML = viewers;
 
             let duration_elem = document.getElementById(stream + '-duration');
             duration_elem.innerHTML = duration;
+
+            // Red/green statuses
+            if (online && stream_elem.classList.contains('app-unhealthy')) {
+                stream_elem.classList.add('app-healthy');
+                stream_elem.classList.remove('app-unhealthy');
+            } else if (!online && stream_elem.classList.contains('app-healthy')) {
+                stream_elem.classList.add('app-unhealthy');
+                stream_elem.classList.remove('app-healthy');
+            }
         }
     });
 </script>
