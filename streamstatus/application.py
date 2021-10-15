@@ -33,7 +33,7 @@ class Application(ABC):
     @property
     def is_up(self):
         try:
-            response = requests.get(self.url, timeout=5)
+            response = requests.get(self.url, timeout=1)
         except OSError:
             return False
 
