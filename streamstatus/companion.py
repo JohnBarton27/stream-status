@@ -10,12 +10,3 @@ class Companion(Application):
 
     def _get_app_name(self):
         return 'Companion'
-
-    @property
-    def is_up(self):
-        try:
-            response = requests.get(self.url, timeout=5)
-        except OSError:
-            return False
-
-        return response.status_code == 200

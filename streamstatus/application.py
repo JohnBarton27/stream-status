@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+import requests
 
 
 class Application(ABC):
@@ -30,9 +31,13 @@ class Application(ABC):
         return f'http://{self.hostname}:{self.port}'
 
     @property
-    @abstractmethod
     def is_up(self):
-        pass
+        try:
+            response = requests.get(self.url, timeout=5)
+        except OSError:
+            return False
+
+        return response.status_code == 200
 
     @property
     def uptime(self):
