@@ -18,6 +18,10 @@ class StreamHost(ABC):
         pass
 
     @abstractmethod
+    def get_stream_duration(self):
+        pass
+
+    @abstractmethod
     def get_current_viewers(self):
         pass
 

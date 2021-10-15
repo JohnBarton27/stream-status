@@ -49,7 +49,10 @@ def handle_get_viewers():
     while True:
         data = {}
         for stream in streams:
-            data[str(stream)] = {'viewers': stream.get_current_viewers()}
+            data[str(stream)] = {
+                'duration': stream.get_stream_duration(),
+                'viewers': stream.get_current_viewers()
+            }
 
         print(data)
         emit('broadcast-viewers', data, broadcast=True)
