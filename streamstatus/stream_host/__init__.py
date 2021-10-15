@@ -28,3 +28,8 @@ class StreamHost(ABC):
     @abstractmethod
     def get_credentials(self):
         pass
+
+    @classmethod
+    @abstractmethod
+    def logo_name(cls):
+        pass

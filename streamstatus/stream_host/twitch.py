@@ -2,7 +2,6 @@ from configparser import ConfigParser
 from datetime import datetime
 import functools
 import os
-import pytz
 from twitchAPI.twitch import Twitch as TwitchAPI
 
 from streamstatus.stream_host import StreamHost
@@ -60,6 +59,10 @@ class Twitch(StreamHost):
         config_file = os.path.join(stream_status_path, 'config.ini')
         config.read(config_file)
         return TwitchCredentials(config['Twitch']['client_id'], config['Twitch']['secret'])
+
+    @classmethod
+    def logo_name(cls):
+        return 'twitch.png'
 
 
 class TwitchCredentials:
