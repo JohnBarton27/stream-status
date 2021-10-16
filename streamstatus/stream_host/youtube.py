@@ -12,15 +12,16 @@ class YouTube(StreamHost):
 
     @property
     def is_live(self):
-        return len(self.get_channel_live_broadcasts()) > 0
+        return len(self.channel_live_broadcasts) > 0
 
-    def get_channel_live_broadcasts(self):
+    @functools.cached_property
+    def channel_live_broadcasts(self):
         url = f'https://youtube.googleapis.com/youtube/v3/search?eventType=live&type=video&channelId={self.login}&maxResults=50&key={self.get_credentials()}'
         response = requests.get(url)
         return json.loads(response.text)['items']
 
     def get_single_live_video(self):
-        video = self.get_channel_live_broadcasts()[0]
+        video = self.channel_live_broadcasts[0]
         video_id = video['id']['videoId']
         url = f'https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics%2CliveStreamingDetails&id={video_id}&maxResults=50&key={self.get_credentials()}'
         response = requests.get(url)
