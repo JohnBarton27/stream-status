@@ -7,6 +7,7 @@ from streamstatus.light_factory import LightFactory
 from streamstatus.spx_gc import SpxGc
 from streamstatus.tally_arbiter import TallyArbiter
 from streamstatus.stream_host.twitch import Twitch
+from streamstatus.stream_host.youtube import YouTube
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -20,10 +21,13 @@ gath_light_factory = LightFactory('192.168.0.104', app_name='Gathering Light Fac
 trad_light_factory = LightFactory('192.168.3.104', app_name='Traditional Light Factory')
 
 twitch_sumc = Twitch('suntreeumc')
+youtube_sumc = YouTube('UCsBehZanirQsd50CtaFhIfw', friendly_name='Suntree UMC')
+youtube_mba = YouTube('UCnM5iMGiKsZg-iOlIO2ZkdQ', friendly_name='Monterey Bay Aquarium')
+
 
 # apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 apps = [comp]
-streams = [twitch_sumc]
+streams = [twitch_sumc, youtube_sumc, youtube_mba]
 
 
 @app.route("/")

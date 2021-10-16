@@ -1,8 +1,10 @@
+bs4
 flask
 flask-socketio
 google-api-python-client
 google-auth-oauthlib
 google-auth-httplib2
-pytz
+python-youtube
 requests
+selenium
 twitchAPI
