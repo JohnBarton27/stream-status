@@ -14,7 +14,7 @@ class YouTube(StreamHost):
     def is_live(self):
         return len(self.channel_live_broadcasts) > 0
 
-    @functools.cached_property
+    @property
     def channel_live_broadcasts(self):
         url = f'https://youtube.googleapis.com/youtube/v3/search?eventType=live&type=video&channelId={self.login}&maxResults=50&key={self.get_credentials()}'
         response = requests.get(url)
