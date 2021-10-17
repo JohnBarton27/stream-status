@@ -29,10 +29,12 @@ youtube_mba = YouTube('UCnM5iMGiKsZg-iOlIO2ZkdQ', friendly_name='Monterey Bay Aq
 ndi_cam_1 = NDICam('192.168.2.55', app_name='NDI Cam 1')
 ndi_cam_2 = NDICam('192.168.2.53', app_name='NDI Cam 2')
 ndi_cam_3 = NDICam('192.168.2.52', app_name='NDI Cam 3')
+ptz_1 = NDICam('192.168.2.201', app_name='PTZ 1')
+ptz_2 = NDICam('192.168.2.200', app_name='PTZ 2')
 
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc, youtube_sumc, youtube_mba]
-cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3]
+cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
 
 
 @app.route("/")
