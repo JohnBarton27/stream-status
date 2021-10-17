@@ -7,6 +7,7 @@ from streamstatus.light_factory import LightFactory
 from streamstatus.ndi_cam import NDICam
 from streamstatus.spx_gc import SpxGc
 from streamstatus.tally_arbiter import TallyArbiter
+from streamstatus.stream_host.facebook import Facebook
 from streamstatus.stream_host.twitch import Twitch
 from streamstatus.stream_host.youtube import YouTube
 
@@ -22,8 +23,9 @@ gath_light_factory = LightFactory('192.168.0.104', app_name='Gathering Light Fac
 trad_light_factory = LightFactory('192.168.3.104', app_name='Traditional Light Factory')
 
 twitch_sumc = Twitch('suntreeumc')
-youtube_sumc = YouTube('UCsBehZanirQsd50CtaFhIfw', friendly_name='Suntree UMC')
-youtube_mba = YouTube('UCnM5iMGiKsZg-iOlIO2ZkdQ', friendly_name='Monterey Bay Aquarium')
+# youtube_sumc = YouTube('UCsBehZanirQsd50CtaFhIfw', friendly_name='Suntree UMC')
+# youtube_mba = YouTube('UCnM5iMGiKsZg-iOlIO2ZkdQ', friendly_name='Monterey Bay Aquarium')
+facebook_sumc = Facebook('SuntreeUMC')
 
 # Cams
 ndi_cam_1 = NDICam('192.168.2.55', app_name='NDI Cam 1')
@@ -33,7 +35,7 @@ ptz_1 = NDICam('192.168.2.201', app_name='PTZ 1')
 ptz_2 = NDICam('192.168.2.200', app_name='PTZ 2')
 
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
-streams = [twitch_sumc, youtube_sumc, youtube_mba]
+streams = [twitch_sumc, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
 
 
