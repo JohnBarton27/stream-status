@@ -33,12 +33,26 @@
       <span style="width: 20%; display: inline-block;">Uptime</span>
   </div>
   {% for stream in streams %}
-  <div id="{{stream.__class__.__name__}}-{{ stream.friendly_name }}" class="app-status {% if stream.is_live %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
+  <div id="{{stream.__class__.__name__}}-{{ stream.login }}" class="app-status {% if stream.is_live %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
       <img width="50" style="margin-top:-10px; margin-bottom:-15px;" src="{{ url_for('static', filename='images/' + stream.__class__.logo_name()) }}">
       <span style="width: 30%; display: inline-block;">{{ stream.friendly_name }}</span>
       <span id="{{stream}}-viewers" style="width: 20%; display: inline-block;">{% if stream.get_current_viewers() == -1 %} Offline {% else %} {{ stream.get_current_viewers() }} {% endif %}</span>
       <span id="{{stream}}-duration" style="width: 20%; display: inline-block;">{% if stream.get_stream_duration() == -1 %} Offline {% else %} {{ stream.get_stream_duration() }} {% endif %}</span>
   </div>
+  {% endfor %}
+
+  <h2>Cameras</h2>
+  <div style="text-align: center;">
+    <span style="width: 60%; display: inline-block;">Application</span>
+    <span>Up/Down Time</span>
+  </div>
+  {% for app in cams %}
+    <a href="{{app.url}}" target="_blank">
+      <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
+        <span style="width: 60%; display: inline-block;">{{ app }}</span>
+        <span id="{{app.app_name}}-uptime">{{ app.uptime }}</span>
+      </div>
+    </a>
   {% endfor %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
@@ -47,9 +61,26 @@
     socket.on('connect', function() {
         socket.emit('get_statuses');
         socket.emit('get_viewers');
+        socket.emit('get_cams');
     });
 
     socket.on('broadcast-statuses',function(data){
+      for (const [app, app_info] of Object.entries(data)) {
+        status = app_info['status'];
+        let app_elem = document.getElementById(app);
+        let app_time_elem = document.getElementById(app + '-uptime');
+        app_time_elem.innerHTML = app_info['time'];
+        if (status == 'true' && app_elem.classList.contains('app-unhealthy')) {
+          app_elem.classList.add('app-healthy');
+          app_elem.classList.remove('app-unhealthy');
+        } else if (status == 'false' && app_elem.classList.contains('app-healthy')) {
+          app_elem.classList.add('app-unhealthy');
+          app_elem.classList.remove('app-healthy');
+        }
+      }
+    });
+
+    socket.on('broadcast-cams',function(data){
       for (const [app, app_info] of Object.entries(data)) {
         status = app_info['status'];
         let app_elem = document.getElementById(app);
