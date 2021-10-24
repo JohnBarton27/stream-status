@@ -31,6 +31,28 @@ a {
     animation: blinkingBackground 1s infinite;
 }
 
+.countdown-danger {
+    background-color: blue;
+    color: white;
+    animation: blinkingBlueBackground 1s infinite;
+}
+
+.countdown-extreme-danger {
+    background-color: blue;
+    color: white;
+    animation: extremeDanger 0.5s infinite;
+}
+
+@keyframes extremeDanger {
+    0%      { font-size: 1rem; background-color: blue; }
+    50%     { font-size: 2rem; background-color: black; }
+}
+
+@keyframes blinkingBlueBackground{
+    0%		{ background-color: blue;}
+    50%		{ background-color: black;}
+}
+
 @keyframes blinkingBackground{
     0%		{ background-color: red;}
     50%		{ background-color: black;}

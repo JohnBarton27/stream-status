@@ -39,14 +39,13 @@ ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
 
 # Events
-stream_start = Event('Stream Start', datetime(year=2021, month=10, day=24, hour=11, minute=55))
-print(stream_start)
-print(stream_start.get_time_remaining())
+stream_start = Event('Stream Start 1', datetime(year=2021, month=10, day=24, hour=12, minute=1))
+stream_start2 = Event('Stream Start 2', datetime(year=2021, month=10, day=24, hour=12, minute=2))
 
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
-events = [stream_start]
+events = [stream_start, stream_start2]
 
 @app.route("/")
 def index():
@@ -91,12 +90,16 @@ def handle_get_cams():
         emit('broadcast-cams', data, broadcast=True)
         time.sleep(2)
 
+
 @socketio.on('get_events')
 def handle_get_events():
     while True:
         data = {}
         for event in events:
-            data[event.name] = {'time_remaining': event.get_time_remaining()}
+            data[event.name] = {'time_remaining': event.get_time_remaining(),
+                                'danger_zone': event.in_danger_zone,
+                                'extreme_danger_zone': event.in_extreme_danger_zone,
+                                'id': event.id}
 
         print(data)
         emit('broadcast-events', data, broadcast=True)

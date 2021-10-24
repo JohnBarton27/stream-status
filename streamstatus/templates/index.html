@@ -13,17 +13,19 @@
 <body>
   <h1>Stream Status</h1>
 
-  <h3>Events</h3>
-  <div style="text-align: center;">
-    <span style="width: 60%; display: inline-block;">Event</span>
-    <span>Countdown</span>
-  </div>
-  {% for event in events %}
-    <div id="{{event.name}}" class="app-status app-healthy" style="text-align: center;">
-      <span style="width: 60%; display: inline-block;">{{ event.name }}</span>
-      <span id="{{event.name}}-countdown">{{ event.get_time_remaining() }}</span>
+  <div id="events">
+    <h2>Events</h2>
+    <div style="text-align: center;">
+      <span style="width: 60%; display: inline-block;">Event</span>
+      <span>Countdown</span>
     </div>
-  {% endfor %}
+    {% for event in events %}
+      <div id="{{event.id}}" class="app-status app-healthy" style="text-align: center;">
+        <span style="width: 60%; display: inline-block;">{{ event.name }}</span>
+        <span id="{{event.name}}-countdown">{{ event.get_time_remaining() }}</span>
+      </div>
+    {% endfor %}
+  </div>
 
 
   <h2>Core Applications</h2>
@@ -146,13 +148,46 @@
     });
 
     socket.on('broadcast-events',function(data){
-      console.log(data)
+      let num_events = 0;
       for (const [event, event_info] of Object.entries(data)) {
         time_remaining = event_info['time_remaining'];
-        let event_elem = document.getElementById(event.name);
+        let event_elem = document.getElementById(event_info['id']);
+
+        if (time_remaining == -1) {
+          event_elem.style.display = "none";
+          continue;
+        } else {
+          event_elem.style.display = "block";
+        }
+        num_events++;
+
         let event_countdown_elem = document.getElementById(event + '-countdown');
         event_countdown_elem.innerHTML = time_remaining;
+
+        let in_danger_zone = event_info['danger_zone'] == true;
+        let in_extreme_danger_zone = event_info['extreme_danger_zone'] == true;
+
+        // Red/green statuses
+        if (in_extreme_danger_zone && event_elem.classList.contains('countdown-danger')) {
+          event_elem.classList.add('countdown-extreme-danger');
+          event_elem.classList.remove('countdown-danger');
+        } else if (in_danger_zone && event_elem.classList.contains('app-healthy')) {
+          event_elem.classList.add('countdown-danger');
+          event_elem.classList.remove('app-healthy');
+        } else if (!in_danger_zone && event_elem.classList.contains('countdown-danger')) {
+          event_elem.classList.add('app-healthy');
+          event_elem.classList.remove('countdown-danger');
+        } else if (!in_danger_zone && event_elem.classList.contains('countdown-extreme-danger')) {
+          event_elem.classList.add('app-healthy');
+          event_elem.classList.remove('countdown-extreme-danger');
+        }
       }
+
+      if (num_events == 0) {
+        let events_elem = document.getElementById('events');
+        events_elem.style.display = 'none';
+      }
+
     });
 </script>
 </body>
