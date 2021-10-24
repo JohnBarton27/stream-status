@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
+from datetime import datetime
 import time
 
 from streamstatus.companion import Companion
@@ -11,6 +12,7 @@ from streamstatus.tally_arbiter import TallyArbiter
 from streamstatus.stream_host.facebook import Facebook
 from streamstatus.stream_host.twitch import Twitch
 from streamstatus.stream_host.youtube import YouTube
+from streamstatus.event import Event
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -35,14 +37,20 @@ ndi_cam_3 = NDICam('192.168.2.52', app_name='NDI Cam 3')
 ptz_1 = PTZCam('192.168.2.201', app_name='PTZ 1')
 ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
+
+# Events
+stream_start = Event('Stream Start', datetime(year=2021, month=10, day=24, hour=11, minute=55))
+print(stream_start)
+print(stream_start.get_time_remaining())
+
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
-
+events = [stream_start]
 
 @app.route("/")
 def index():
-    return render_template("index.html", apps=apps, streams=streams, cams=cams)
+    return render_template("index.html", apps=apps, streams=streams, cams=cams, events=events)
 
 
 @socketio.on('get_statuses')
@@ -82,6 +90,17 @@ def handle_get_cams():
         print(data)
         emit('broadcast-cams', data, broadcast=True)
         time.sleep(2)
+
+@socketio.on('get_events')
+def handle_get_events():
+    while True:
+        data = {}
+        for event in events:
+            data[event.name] = {'time_remaining': event.get_time_remaining()}
+
+        print(data)
+        emit('broadcast-events', data, broadcast=True)
+        time.sleep(1)
 
 
 if __name__ == "__main__":

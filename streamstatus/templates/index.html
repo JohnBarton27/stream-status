@@ -12,6 +12,20 @@
 
 <body>
   <h1>Stream Status</h1>
+
+  <h3>Events</h3>
+  <div style="text-align: center;">
+    <span style="width: 60%; display: inline-block;">Event</span>
+    <span>Countdown</span>
+  </div>
+  {% for event in events %}
+    <div id="{{event.name}}" class="app-status app-healthy" style="text-align: center;">
+      <span style="width: 60%; display: inline-block;">{{ event.name }}</span>
+      <span id="{{event.name}}-countdown">{{ event.get_time_remaining() }}</span>
+    </div>
+  {% endfor %}
+
+
   <h2>Core Applications</h2>
   <div style="text-align: center;">
     <span style="width: 60%; display: inline-block;">Application</span>
@@ -62,6 +76,7 @@
         socket.emit('get_statuses');
         socket.emit('get_viewers');
         socket.emit('get_cams');
+        socket.emit('get_events');
     });
 
     socket.on('broadcast-statuses',function(data){
@@ -128,6 +143,16 @@
                 stream_elem.classList.remove('app-healthy');
             }
         }
+    });
+
+    socket.on('broadcast-events',function(data){
+      console.log(data)
+      for (const [event, event_info] of Object.entries(data)) {
+        time_remaining = event_info['time_remaining'];
+        let event_elem = document.getElementById(event.name);
+        let event_countdown_elem = document.getElementById(event + '-countdown');
+        event_countdown_elem.innerHTML = time_remaining;
+      }
     });
 </script>
 </body>
