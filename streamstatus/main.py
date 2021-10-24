@@ -12,7 +12,7 @@ from streamstatus.tally_arbiter import TallyArbiter
 from streamstatus.stream_host.facebook import Facebook
 from streamstatus.stream_host.twitch import Twitch
 from streamstatus.stream_host.youtube import YouTube
-from streamstatus.event import Event
+from streamstatus.event import Event, SundayEvent
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -39,13 +39,13 @@ ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
 
 # Events
-stream_start = Event('Stream Start 1', datetime(year=2021, month=10, day=24, hour=12, minute=1))
-stream_start2 = Event('Stream Start 2', datetime(year=2021, month=10, day=24, hour=12, minute=2))
+gath_stream_start = SundayEvent('Gath Stream Start', hour=12, minute=25)
+trad_stream_start = SundayEvent('Trad Stream Start', hour=10, minute=55)
 
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
-events = [stream_start, stream_start2]
+events = [gath_stream_start, trad_stream_start]
 
 @app.route("/")
 def index():

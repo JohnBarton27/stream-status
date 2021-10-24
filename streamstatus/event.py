@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class Event:
@@ -49,3 +49,20 @@ class Event:
         td_str = f'{f"{hours}:" if hours != 0 else ""}{minutes}:{seconds}'
 
         return td_str
+
+
+class SundayEvent(Event):
+
+    def __init__(self, name: str, hour: int, minute: int = 0, second: int = 0):
+        sunday = SundayEvent.get_next_sunday()
+        time = datetime(year=sunday.year, month=sunday.month, day=sunday.day, hour=hour, minute=minute, second=second)
+        super().__init__(name, time)
+
+    @staticmethod
+    def get_next_sunday():
+        sunday = datetime.now()
+
+        while sunday.weekday() != 6:
+            sunday = sunday + timedelta(days=1)
+
+        return sunday
