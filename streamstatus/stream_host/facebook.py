@@ -19,6 +19,7 @@ class Facebook(StreamHost):
     def _get_live_videos(self):
         url = f'https://graph.facebook.com/v12.0/{self.login}/live_videos?access_token={self.get_credentials()}'
         response = requests.get(url)
+        print(response.text)
         live_videos = json.loads(response.text)['data']
         return live_videos
 
