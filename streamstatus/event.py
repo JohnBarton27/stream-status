@@ -23,6 +23,10 @@ class Event:
         return (self.time - datetime.now()).seconds
 
     @property
+    def _days_remaining(self):
+        return (self.time - datetime.now()).days
+
+    @property
     def in_danger_zone(self):
         return self._seconds_remaining < 60
 
@@ -38,7 +42,7 @@ class Event:
 
         hours = time_delta // 3600
         minutes = (time_delta // 60) % 60
-        seconds = time_delta - (minutes * 60)
+        seconds = time_delta - (minutes * 60) - (hours * 3600)
 
         if minutes < 10:
             minutes = f'0{minutes}'
@@ -46,7 +50,14 @@ class Event:
         if seconds < 10:
             seconds = f'0{seconds}'
 
-        td_str = f'{f"{hours}:" if hours != 0 else ""}{minutes}:{seconds}'
+        days_str = ''
+        if self._days_remaining > 0:
+            days_str = f'{self._days_remaining} day'
+            days_str = f'{days_str}s ' if self._days_remaining > 1 else f'{days_str} '
+
+        hrs_str = f'{hours}:' if hours != 0 else ''
+
+        td_str = f'{days_str}{hrs_str}{minutes}:{seconds}'
 
         return td_str
 
@@ -66,3 +77,16 @@ class SundayEvent(Event):
             sunday = sunday + timedelta(days=1)
 
         return sunday
+
+
+class Service(SundayEvent):
+
+    def __init__(self, name: str, hour: int, minute: int = 0, advance_stream_start_min: int = 5, welcome=None):
+        super().__init__(name, hour, minute)
+        self.advance_stream_start_min = advance_stream_start_min
+        self.welcome = welcome
+
+    def get_all_events(self):
+        stream_start = Event(f'{self.name} Stream Start', self.time - timedelta(minutes=self.advance_stream_start_min))
+        welcome_video_start = Event(f'{self.name} Welcome Video Start', self.time - timedelta(seconds=self.welcome.length))
+        return [stream_start, welcome_video_start, self]

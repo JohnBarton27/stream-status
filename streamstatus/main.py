@@ -12,7 +12,8 @@ from streamstatus.tally_arbiter import TallyArbiter
 from streamstatus.stream_host.facebook import Facebook
 from streamstatus.stream_host.twitch import Twitch
 from streamstatus.stream_host.youtube import YouTube
-from streamstatus.event import Event, SundayEvent
+from streamstatus.event import Event, SundayEvent, Service
+from streamstatus.video import WelcomeVideo
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -39,13 +40,19 @@ ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
 
 # Events
-gath_stream_start = SundayEvent('Gath Stream Start', hour=12, minute=25)
-trad_stream_start = SundayEvent('Trad Stream Start', hour=10, minute=55)
+gathering = Service('Gath', hour=9, minute=30)
+traditional = Service('Trad', hour=11, minute=0)
+
+# videos
+welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Online_Worship_Videos/A Very Chill Welcome 10-17.mp4')
+gathering.welcome = welcome_video
+traditional.welcome = welcome_video
 
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
-events = [gath_stream_start, trad_stream_start]
+events = gathering.get_all_events() + traditional.get_all_events()
+
 
 @app.route("/")
 def index():
