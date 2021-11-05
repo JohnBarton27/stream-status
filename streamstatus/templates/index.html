@@ -15,12 +15,12 @@
 
   <div id="events">
     <h2>Events</h2>
-    <div style="text-align: center;">
-      <span style="width: 60%; display: inline-block;">Event</span>
-      <span>Countdown</span>
-    </div>
+<!--    <div style="text-align: center;">-->
+<!--      <span style="width: 60%; display: inline-block;">Event</span>-->
+<!--      <span>Countdown</span>-->
+<!--    </div>-->
     {% for event in events %}
-      <div id="{{event.id}}" class="app-status app-healthy" style="text-align: center;">
+      <div id="{{event.id}}" class="app-status app-healthy" style="text-align: center; width: 30%; display: inline;">
         <span style="width: 60%; display: inline-block;">{{ event.name }}</span>
         <span id="{{event.name}}-countdown">{{ event.get_time_remaining() }}</span>
       </div>
@@ -157,7 +157,7 @@
           event_elem.style.display = "none";
           continue;
         } else {
-          event_elem.style.display = "block";
+          event_elem.style.display = "inline-block";
         }
         num_events++;
 

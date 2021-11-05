@@ -40,7 +40,7 @@ ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
 
 # Events
-gathering = Service('Gath', hour=9, minute=30)
+gathering = Service('Gath', hour=20, minute=10)
 traditional = Service('Trad', hour=11, minute=0)
 
 # videos
