@@ -43,8 +43,8 @@ ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
 
 # Events
-gathering = Service('Gath', hour=18, minute=30)
-traditional = Service('Trad', hour=11, minute=56)
+gathering = Service('Gath', hour=9, minute=30)
+traditional = Service('Trad', hour=11, minute=0)
 
 # videos
 welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/11-7-21/Mike Welcome 11-7.mp4')
