@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <h1>Stream Status</h1>
+<h1><u>Stream Status</u></h1>
 
   <div id="events">
     <h2>Events</h2>
@@ -25,21 +25,18 @@
     </span>
   </div>
 
-  <br>
-
   <h2>Core Applications</h2>
-  <div style="text-align: center;">
-    <span style="width: 60%; display: inline-block;">Application</span>
-    <span>Up/Down Time</span>
-  </div>
+  <span style="display: flex; flex-wrap: wrap;">
   {% for app in apps %}
-    <a href="{{app.url}}" target="_blank">
+    <a href="{{app.url}}" class="flex-child" target="_blank">
       <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
-        <span style="width: 60%; display: inline-block;">{{ app }}</span>
-        <span id="{{app.app_name}}-uptime">{{ app.uptime }}</span>
+        <span id="{{app.app_name}}-uptime" style="font-size: 1.5rem;">{{ app.uptime }}</span>
+        <strong><span style="display: block;">{{ app.app_name }}</span></strong>
+        <span style="display: block; font-size: 0.8rem;">{{ app.hostname }}</span>
       </div>
     </a>
   {% endfor %}
+  </span>
 
   <h2>Streams</h2>
   <div style="text-align: center;">
