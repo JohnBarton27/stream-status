@@ -36,6 +36,8 @@ facebook_sumc = Facebook('SuntreeUMC')
 ndi_cam_1 = NDICam('192.168.2.55', app_name='NDI Cam 1')
 ndi_cam_2 = NDICam('192.168.2.53', app_name='NDI Cam 2')
 ndi_cam_3 = NDICam('192.168.2.52', app_name='NDI Cam 3')
+drum_cam = NDICam('192.168.2.54', app_name='Drum Cam')
+piano_cam = NDICam('192.168.2.69', app_name='Piano Cam')
 ptz_1 = PTZCam('192.168.2.201', app_name='PTZ 1')
 ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
@@ -51,7 +53,7 @@ traditional.welcome = welcome_video
 
 apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc] #, facebook_sumc]
-cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, ptz_1, ptz_2]
+cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
 events = gathering.get_all_events() + traditional.get_all_events()
 
 
