@@ -54,18 +54,17 @@
   {% endfor %}
 
   <h2>Cameras</h2>
-  <div style="text-align: center;">
-    <span style="width: 60%; display: inline-block;">Application</span>
-    <span>Up/Down Time</span>
-  </div>
+  <span style="display: flex; flex-wrap: wrap;">
   {% for app in cams %}
-    <a href="{{app.url}}" target="_blank">
+    <a href="{{app.url}}" class="flex-child-cameras" target="_blank">
       <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
-        <span style="width: 60%; display: inline-block;">{{ app }}</span>
-        <span id="{{app.app_name}}-uptime">{{ app.uptime }}</span>
+        <span id="{{app.app_name}}-uptime" style="font-size: 1.5rem;">{{ app.uptime }}</span>
+        <span style="display: block;">{{ app.app_name }}</span>
+        <span style="display: block; font-size: 0.8rem;">{{ app.hostname }}</span>
       </div>
     </a>
   {% endfor %}
+  </span>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type="text/javascript" charset="utf-8">
