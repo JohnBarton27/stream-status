@@ -14,6 +14,7 @@ from streamstatus.stream_host.twitch import Twitch
 from streamstatus.stream_host.youtube import YouTube
 from streamstatus.event import Event, SundayEvent, Service
 from streamstatus.video import WelcomeVideo
+from flask import Flask, render_template
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -40,11 +41,11 @@ ptz_2 = PTZCam('192.168.2.200', app_name='PTZ 2')
 
 
 # Events
-gathering = Service('Gath', hour=20, minute=10)
+gathering = Service('Gath', hour=9, minute=30)
 traditional = Service('Trad', hour=11, minute=0)
 
 # videos
-welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Online_Worship_Videos/A Very Chill Welcome 10-17.mp4')
+welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/11-7-21/Mike Welcome 11-7.mp4')
 gathering.welcome = welcome_video
 traditional.welcome = welcome_video
 

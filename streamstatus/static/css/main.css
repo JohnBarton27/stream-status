@@ -20,6 +20,12 @@ a {
     text-align: center;
 }
 
+.timer {
+    text-align: center;
+    width: calc(100% * (1/3));
+    flex: 1 0 21%;
+}
+
 .app-healthy {
     background-color: #23a138;
     color: black;
@@ -41,6 +47,12 @@ a {
     background-color: blue;
     color: white;
     animation: extremeDanger 0.5s infinite;
+}
+
+.col-three {
+    width: 33%;
+    float: left;
+    display: inline;
 }
 
 @keyframes extremeDanger {
