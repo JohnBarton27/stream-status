@@ -15,15 +15,11 @@
 
   <div id="events">
     <h2>Events</h2>
-<!--    <div style="text-align: center;">-->
-<!--      <span style="width: 60%; display: inline-block;">Event</span>-->
-<!--      <span>Countdown</span>-->
-<!--    </div>-->
     <span style="display: flex; flex-wrap: wrap;">
     {% for event in events %}
         <div id="{{event.id}}" class="app-status app-healthy timer">
-          <span style="width: 60%; display: inline-block;">{{ event.name }}</span>
-          <span id="{{event.name}}-countdown">{{ event.get_time_remaining() }}</span>
+          <span class="timer-time" id="{{event.name}}-countdown">{{ event.get_time_remaining() }}</span>
+          <span class="timer-name">{{ event.name }}</span>
         </div>
     {% endfor %}
     </span>

@@ -26,6 +26,15 @@ a {
     flex: 1 0 21%;
 }
 
+.timer-name {
+    display: block;
+}
+
+.timer-time {
+    display: block;
+    font-size: 2rem;
+}
+
 .app-healthy {
     background-color: #23a138;
     color: black;
