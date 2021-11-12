@@ -15,7 +15,7 @@
 <h1><u>Stream Status - Configuration</u></h1>
 <div id="applications">
   <h3>Applications</h3>
-  <table>
+  <table id="app-table">
     <tr>
       <th>Name</th>
       <th>Hostname</th>
@@ -52,7 +52,11 @@
     fetch('application', {
       method: 'PUT',
       body: formData
-    });
+    }).then(function() {
+      document.getElementById("new-app-name").value = '';
+      document.getElementById("new-app-hostname").value = '';
+      document.getElementById("new-app-port").value = '';
+    });;
   });
 </script>
 </body>

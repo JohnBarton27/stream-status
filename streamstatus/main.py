@@ -68,7 +68,13 @@ cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
 events = gathering.get_all_events() + traditional.get_all_events()
 
 # FROM DATABASE
-apps_from_db = app_dao.get_all()
+apps_from_db = None
+
+
+def update_from_db():
+    global apps_from_db
+    apps_from_db = app_dao.get_all()
+
 
 # DISPLAYS
 @app.route("/")
@@ -90,6 +96,8 @@ def create_application():
 
     app = Application(app_hostname, app_port, app_name=app_name)
     app_dao.create(app)
+
+    update_from_db()
     return 'Success!'
 
 
@@ -174,5 +182,6 @@ def connect_to_database():
 
 if __name__ == "__main__":
     connect_to_database()
+    update_from_db()
 
     app.run(port=8001, debug=True)
