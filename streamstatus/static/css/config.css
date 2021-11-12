@@ -2,3 +2,21 @@
 .new-app div {
     margin-top: 5px;
 }
+
+table, td {
+  border: 1px solid #23a138;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+th {
+    font-weight: bold;
+    font-size: 1.5rem;
+    background-color: #23a138;
+    color: black;
+    border: 1px solid black;
+}

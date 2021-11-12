@@ -11,6 +11,10 @@ class Dao(ABC):
         pass
 
     @abstractmethod
+    def get_all(self):
+        pass
+
+    @abstractmethod
     def create(self, obj):
         pass
 
@@ -18,6 +22,10 @@ class Dao(ABC):
     @abstractmethod
     def get_obj_from_result(result):
         pass
+
+    @classmethod
+    def get_objs_from_result(cls, results: list):
+        return [cls.get_obj_from_result(result) for result in results]
 
     @staticmethod
     def get_db_conn():

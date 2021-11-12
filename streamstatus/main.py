@@ -67,6 +67,8 @@ streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
 events = gathering.get_all_events() + traditional.get_all_events()
 
+# FROM DATABASE
+apps_from_db = app_dao.get_all()
 
 # DISPLAYS
 @app.route("/")
@@ -76,7 +78,7 @@ def index():
 
 @app.route("/config.html")
 def config():
-    return render_template("config.html")
+    return render_template("config.html", apps=apps_from_db)
 
 
 # REST API
