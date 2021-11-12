@@ -137,7 +137,8 @@ def connect_to_database():
                     CREATE TABLE application (
                         id TEXT NOT NULL PRIMARY KEY,
                         hostname TEXT NOT NULL,
-                        port INTEGER NOT NULL
+                        port INTEGER NOT NULL,
+                        name TEXT NOT NULL
                     );                
                 """)
 

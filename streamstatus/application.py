@@ -1,14 +1,14 @@
-from abc import ABC, abstractmethod
 from datetime import datetime
 import requests
 
 
-class Application(ABC):
+class Application:
 
-    def __init__(self, hostname: str, port: int, app_name: str = None):
+    def __init__(self, hostname: str, port: int, app_name: str = None, db_id: int = None):
         self.hostname = hostname
         self.port = port
         self._app_name = app_name
+        self.id = db_id
         self._first_healthy = None
         self._first_unhealthy = None
 
@@ -18,13 +18,9 @@ class Application(ABC):
     def __repr__(self):
         return str(self)
 
-    @abstractmethod
-    def _get_app_name(self):
-        pass
-
     @property
     def app_name(self):
-        return self._app_name if self._app_name else self._get_app_name()
+        return self._app_name
 
     @property
     def url(self):
