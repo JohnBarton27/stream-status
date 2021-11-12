@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stream Status - Configuration</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+</head>
+
+<body>
+<h1><u>Stream Status - Configuration</u></h1>
+<div id="applications">
+  <h3>Applications</h3>
+
+  <span class="new-app">
+    <div>
+      <label for="new-app-name">Name</label>
+      <input id="new-app-name" type="text">
+    </div>
+
+    <div>
+      <label for="new-app-hostname">Hostname</label>
+      <input id="new-app-hostname" type="text">
+    </div>
+
+    <div>
+      <label for="new-app-port">Port</label>
+      <input id="new-app-port" type="text">
+    </div>
+    <button id="new-app-create" style="margin-top: 5px;">Create</button>
+  </span>
+
+</div>
+
+<script type="application/javascript">
+  # Create New App button
+  document.getElementById("new-app-create").addEventListener("click", function() {
+    let formData = new FormData();
+    formData.append('name', document.getElementById("new-app-name").value);
+    formData.append('hostname', document.getElementById("new-app-hostname").value);
+    formData.append('port', document.getElementById("new-app-port").value);
+
+    fetch('application', {
+      method: 'PUT',
+      body: formData
+    });
+  });
+</script>
+</body>
+
+</html>

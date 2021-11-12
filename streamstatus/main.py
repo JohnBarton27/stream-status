@@ -74,6 +74,11 @@ def index():
     return render_template("index.html", apps=apps, streams=streams, cams=cams, events=events)
 
 
+@app.route("/config.html")
+def config():
+    return render_template("config.html")
+
+
 # REST API
 @app.route('/application', methods=['PUT'])
 def create_application():
@@ -83,6 +88,7 @@ def create_application():
 
     app = Application(app_hostname, app_port, app_name=app_name)
     app_dao.create(app)
+    return 'Success!'
 
 
 # SOCKETS
@@ -156,7 +162,7 @@ def connect_to_database():
             # APPLICATION
             conn.execute("""
                     CREATE TABLE application (
-                        id TEXT NOT NULL PRIMARY KEY,
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                         hostname TEXT NOT NULL,
                         port INTEGER NOT NULL,
                         name TEXT NOT NULL
