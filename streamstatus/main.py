@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+# STANDARD/THIRDPARTY IMPORTS
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit
 from datetime import datetime
 import logging
@@ -6,6 +7,8 @@ import sqlite3 as sl
 import time
 from urllib.request import pathname2url
 
+# STREAMSTATUS IMPORTS
+from streamstatus.application import Application
 from streamstatus.companion import Companion
 from streamstatus.light_factory import LightFactory
 from streamstatus.ndi_cam import NDICam
@@ -17,11 +20,16 @@ from streamstatus.stream_host.twitch import Twitch
 from streamstatus.stream_host.youtube import YouTube
 from streamstatus.event import Event, SundayEvent, Service
 from streamstatus.video import WelcomeVideo
-from flask import Flask, render_template
+
+# DAO IMPORTS
+from streamstatus.dao.application_dao import ApplicationDao
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
+
+# INITIALIZE DAOS
+app_dao = ApplicationDao()
 
 pi_host = '192.168.2.51'
 comp = Companion(pi_host)
@@ -60,11 +68,24 @@ cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
 events = gathering.get_all_events() + traditional.get_all_events()
 
 
+# DISPLAYS
 @app.route("/")
 def index():
     return render_template("index.html", apps=apps, streams=streams, cams=cams, events=events)
 
 
+# REST API
+@app.route('/application', methods=['PUT'])
+def create_application():
+    app_hostname = request.form['hostname']
+    app_port = int(request.form['port'])
+    app_name = request.form['name']
+
+    app = Application(app_hostname, app_port, app_name=app_name)
+    app_dao.create(app)
+
+
+# SOCKETS
 @socketio.on('get_statuses')
 def handle_my_custom_event():
     while True:
