@@ -1,7 +1,10 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 from datetime import datetime
+import logging
+import sqlite3 as sl
 import time
+from urllib.request import pathname2url
 
 from streamstatus.companion import Companion
 from streamstatus.light_factory import LightFactory
@@ -116,5 +119,30 @@ def handle_get_events():
         time.sleep(1)
 
 
+def connect_to_database():
+    db_name = 'stream_status.db'
+    try:
+        dburi = 'file:{}?mode=rw'.format(pathname2url(db_name))
+        sl.connect(dburi, uri=True)
+        logging.info('Found existing database.')
+    except sl.OperationalError:
+        # handle missing database case
+        logging.warning('Could not find database - will initialize an empty one!')
+        conn = sl.connect(db_name)
+
+        # Setup Tables
+        with conn:
+            # APPLICATION
+            conn.execute("""
+                    CREATE TABLE application (
+                        id TEXT NOT NULL PRIMARY KEY,
+                        hostname TEXT NOT NULL,
+                        port INTEGER NOT NULL
+                    );                
+                """)
+
+
 if __name__ == "__main__":
+    connect_to_database()
+
     app.run(port=8001, debug=True)
