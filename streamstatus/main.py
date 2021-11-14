@@ -82,7 +82,7 @@ def index():
     return render_template("index.html", apps=apps, streams=streams, cams=cams, events=events)
 
 
-@app.route("/config.html")
+@app.route("/config")
 def config():
     return render_template("config.html", apps=apps_from_db)
 
