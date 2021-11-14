@@ -9,56 +9,19 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/config.css') }}">
+
+  <script src="{{ url_for('static', filename='js/config.js') }}"></script>
 </head>
 
-<body>
+<body onload="init()">
 <h1><u>Stream Status - Configuration</u></h1>
 <div id="applications">
   <h3>Applications</h3>
-  <table id="app-table">
-    <tr>
-      <th>Name</th>
-      <th>Hostname</th>
-      <th>Port</th>
-      <th></th>
-    </tr>
-  {% for app in apps %}
-    <tr>
-      <td>{{app.app_name}}</td>
-      <td>{{app.hostname}}</td>
-      <td>{{app.port}}</td>
-      <td></td>
-    </tr>
-  {% endfor %}
-
-  <tr>
-    <td><input id="new-app-name" type="text"></td>
-    <td><input id="new-app-hostname" type="text"></td>
-    <td><input id="new-app-port" type="text"></td>
-    <td><button id="new-app-create" style="margin-top: 5px;">Create</button></td>
-  </tr>
-  </table>
-
 </div>
 
-<script type="application/javascript">
-  // Create New App button
-  document.getElementById("new-app-create").addEventListener("click", function() {
-    let formData = new FormData();
-    formData.append('name', document.getElementById("new-app-name").value);
-    formData.append('hostname', document.getElementById("new-app-hostname").value);
-    formData.append('port', document.getElementById("new-app-port").value);
+<table id="app-table">
+</table>
 
-    fetch('application', {
-      method: 'PUT',
-      body: formData
-    }).then(function() {
-      document.getElementById("new-app-name").value = '';
-      document.getElementById("new-app-hostname").value = '';
-      document.getElementById("new-app-port").value = '';
-    });;
-  });
-</script>
 </body>
 
 </html>

@@ -101,6 +101,13 @@ def create_application():
     return 'Success!'
 
 
+@app.route('/api/configured_apps', methods=['GET'])
+def configured_applications():
+    update_from_db()
+
+    return render_template("elements/app_config.html", apps=apps_from_db)
+
+
 # SOCKETS
 @socketio.on('get_statuses')
 def handle_my_custom_event():
