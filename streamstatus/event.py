@@ -88,5 +88,8 @@ class Service(SundayEvent):
 
     def get_all_events(self):
         stream_start = Event(f'{self.name} Stream Start', self.time - timedelta(minutes=self.advance_stream_start_min))
-        welcome_video_start = Event(f'{self.name} Welcome Video Start', self.time - timedelta(seconds=self.welcome.length))
-        return [stream_start, welcome_video_start, self]
+        if self.welcome:
+            welcome_video_start = Event(f'{self.name} Welcome Video Start', self.time - timedelta(seconds=self.welcome.length))
+            return [stream_start, welcome_video_start, self]
+
+        return [stream_start,  self]
