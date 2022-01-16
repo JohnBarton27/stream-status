@@ -36,8 +36,8 @@ a {
 }
 
 .flex-cameras {
-    width: calc(100% * (1/4));
-    flex: 1 0 25%;
+    width: calc(100% * (1/10));
+    flex: 1 0 10%;
 }
 
 .timer {

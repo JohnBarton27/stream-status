@@ -58,7 +58,7 @@ gathering = Service('Gath', hour=9, minute=30)
 traditional = Service('Trad', hour=11, minute=0)
 
 # videos
-welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/11-7-21/Mike Welcome 11-7.mp4')
+welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Welcome to Worship January.mp4')
 gathering.welcome = welcome_video
 traditional.welcome = welcome_video
 

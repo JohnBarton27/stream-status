@@ -56,7 +56,7 @@
   <h2>Cameras</h2>
   <span style="display: flex; flex-wrap: wrap;">
   {% for app in cams %}
-    <a href="{{app.url}}" class="flex-child-cameras" target="_blank">
+    <a href="{{app.url}}" class="flex-cameras" target="_blank">
       <div id="{{app.app_name}}" class="app-status {% if app.get_is_healthy() %} app-healthy {% else %} app-unhealthy {% endif %}" style="text-align: center;">
         <span id="{{app.app_name}}-uptime" style="font-size: 1.5rem;">{{ app.uptime }}</span>
         <span style="display: block;">{{ app.app_name }}</span>
