@@ -1,0 +1,21 @@
+<tr>
+    <th>Name</th>
+    <th>Hostname</th>
+    <th>Port</th>
+    <th></th>
+</tr>
+
+{% for app in apps %}
+<tr>
+    <td>{{app.app_name}}</td>
+    <td>{{app.hostname}}</td>
+    <td>{{app.port}}</td>
+    <td></td>
+</tr>
+{% endfor %}
+<tr>
+    <td><input id="new-app-name" type="text"></td>
+    <td><input id="new-app-hostname" type="text"></td>
+    <td><input id="new-app-port" type="text"></td>
+    <td><button id="new-app-create" style="margin-top: 5px;">Create</button></td>
+</tr>

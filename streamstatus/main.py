@@ -82,7 +82,7 @@ def index():
     return render_template("index.html", apps=apps, streams=streams, cams=cams, events=events)
 
 
-@app.route("/config.html")
+@app.route("/config")
 def config():
     return render_template("config.html", apps=apps_from_db)
 
@@ -99,6 +99,13 @@ def create_application():
 
     update_from_db()
     return 'Success!'
+
+
+@app.route('/api/configured_apps', methods=['GET'])
+def configured_applications():
+    update_from_db()
+
+    return render_template("elements/app_config.html", apps=apps_from_db)
 
 
 # SOCKETS
