@@ -2,6 +2,7 @@ let configured_apps_elem = null;
 
 function init() {
     update_app_table();
+    update_welcome_video_display();
 }
 
 function update_app_table() {
@@ -12,6 +13,17 @@ function update_app_table() {
     }).then(function(html) {
         configured_apps_elem.innerHTML = html;
         setup_create_app_button();
+    });
+}
+
+function update_welcome_video_display() {
+    welcome_video_elem = document.getElementById('welcome-video')
+
+    fetch('/api/configured_welcome_video').then(function(response) {
+        return response.text();
+    }).then(function(html) {
+        welcome_video_elem.innerHTML = html;
+        setup_save_wv_button();
     });
 }
 
@@ -29,4 +41,19 @@ function setup_create_app_button() {
             update_app_table();
         });
     });
+}
+
+function setup_save_wv_button() {
+    document.getElementById("wv-update").addEventListener("click", function () {
+        let formData = new FormData();
+        formData.append('filepath', document.getElementById("welcome-video-path").value);
+
+        fetch('welcome_video', {
+            method: 'PUT',
+            body: formData
+        }).then(function () {
+            update_welcome_video_display();
+        });
+    });
+
 }

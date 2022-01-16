@@ -73,7 +73,7 @@ class SundayEvent(Event):
     def get_next_sunday():
         sunday = datetime.now()
 
-        while sunday.weekday() != 6:
+        while sunday.weekday() != 0:
             sunday = sunday + timedelta(days=1)
 
         return sunday

@@ -23,6 +23,7 @@ from streamstatus.video import WelcomeVideo
 
 # DAO IMPORTS
 from streamstatus.dao.application_dao import ApplicationDao
+from streamstatus.dao.wv_dao import WelcomeVideoDao
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -30,6 +31,7 @@ socketio = SocketIO(app)
 
 # INITIALIZE DAOS
 app_dao = ApplicationDao()
+wv_dao = WelcomeVideoDao()
 
 twitch_sumc = Twitch('suntreeumc')
 # youtube_sumc = YouTube('UCsBehZanirQsd50CtaFhIfw', friendly_name='Suntree UMC')
@@ -51,9 +53,7 @@ gathering = Service('Gath', hour=9, minute=30)
 traditional = Service('Trad', hour=11, minute=0)
 
 # videos
-welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Welcome to Worship January.mp4')
-gathering.welcome = welcome_video
-traditional.welcome = welcome_video
+# welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Welcome to Worship January.mp4')
 
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
@@ -61,11 +61,16 @@ events = gathering.get_all_events() + traditional.get_all_events()
 
 # FROM DATABASE
 apps_from_db = None
+welcome_video = None
 
 
 def update_from_db():
-    global apps_from_db
+    global apps_from_db, welcome_video
     apps_from_db = app_dao.get_all()
+    welcome_video = wv_dao.get_all()[0] if wv_dao.get_all() else None
+
+    gathering.welcome = welcome_video
+    traditional.welcome = welcome_video
 
 
 # DISPLAYS
@@ -93,11 +98,31 @@ def create_application():
     return 'Success!'
 
 
+@app.route('/welcome_video', methods=['PUT'])
+def update_welcome_video():
+    wv_filepath = request.form['filepath']
+    wv = WelcomeVideo.get_from_file(wv_filepath)
+    wv_dao.create(wv)
+
+    update_from_db()
+
+    gathering.welcome = welcome_video
+    traditional.welcome = welcome_video
+    return 'Success!'
+
+
 @app.route('/api/configured_apps', methods=['GET'])
 def configured_applications():
     update_from_db()
 
     return render_template("elements/app_config.html", apps=apps_from_db)
+
+
+@app.route('/api/configured_welcome_video', methods=['GET'])
+def configured_welcome_video():
+    update_from_db()
+
+    return render_template("elements/welcome_video_config.html", welcome_video=welcome_video)
 
 
 # SOCKETS
@@ -177,6 +202,14 @@ def connect_to_database():
                         name TEXT NOT NULL
                     );                
                 """)
+
+            # VIDEO
+            conn.execute("""
+                    CREATE TABLE welcome_video (
+                        filepath TEXT NOT NULL,
+                        length INT NOT NULL 
+                    )
+            """)
 
 
 if __name__ == "__main__":
