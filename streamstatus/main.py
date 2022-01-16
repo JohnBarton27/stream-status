@@ -31,13 +31,6 @@ socketio = SocketIO(app)
 # INITIALIZE DAOS
 app_dao = ApplicationDao()
 
-pi_host = '192.168.2.51'
-comp = Companion(pi_host)
-tally_arbiter = TallyArbiter(pi_host)
-spx = SpxGc(pi_host)
-gath_light_factory = LightFactory('192.168.0.104', app_name='Gathering Light Factory')
-trad_light_factory = LightFactory('192.168.3.104', app_name='Traditional Light Factory')
-
 twitch_sumc = Twitch('suntreeumc')
 # youtube_sumc = YouTube('UCsBehZanirQsd50CtaFhIfw', friendly_name='Suntree UMC')
 # youtube_mba = YouTube('UCnM5iMGiKsZg-iOlIO2ZkdQ', friendly_name='Monterey Bay Aquarium')
@@ -62,7 +55,6 @@ welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Welcome to Wo
 gathering.welcome = welcome_video
 traditional.welcome = welcome_video
 
-apps = [comp, tally_arbiter, spx, gath_light_factory, trad_light_factory]
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
 events = gathering.get_all_events() + traditional.get_all_events()
@@ -79,7 +71,7 @@ def update_from_db():
 # DISPLAYS
 @app.route("/")
 def index():
-    return render_template("index.html", apps=apps, streams=streams, cams=cams, events=events)
+    return render_template("index.html", apps=apps_from_db, streams=streams, cams=cams, events=events)
 
 
 @app.route("/config")
@@ -113,7 +105,7 @@ def configured_applications():
 def handle_my_custom_event():
     while True:
         data = {}
-        for application in apps:
+        for application in apps_from_db:
             data[application.app_name] = {'status': application.get_is_healthy(), 'time': application.uptime}
 
         print(data)
