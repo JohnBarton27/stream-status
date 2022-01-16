@@ -47,7 +47,7 @@ gathering = Service('Gath', hour=9, minute=30)
 traditional = Service('Trad', hour=11, minute=0)
 
 # videos
-welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/11-7-21/Mike Welcome 11-7.mp4')
+welcome_video = WelcomeVideo.get_from_file('/home/streaming/Videos/Welcome to Worship January.mp4')
 gathering.welcome = welcome_video
 traditional.welcome = welcome_video
 
@@ -117,4 +117,4 @@ def handle_get_events():
 
 
 if __name__ == "__main__":
-    app.run(port=8001, debug=True)
+    app.run(host="0.0.0.0", port=8001, debug=True)
