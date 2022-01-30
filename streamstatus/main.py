@@ -57,7 +57,7 @@ traditional = Service('Trad', hour=11, minute=0)
 
 streams = [twitch_sumc] #, facebook_sumc]
 cams = [ndi_cam_1, ndi_cam_2, ndi_cam_3, drum_cam, piano_cam, ptz_1, ptz_2]
-events = gathering.get_all_events() + traditional.get_all_events()
+events = None
 
 # FROM DATABASE
 apps_from_db = None
@@ -65,12 +65,12 @@ welcome_video = None
 
 
 def update_from_db():
-    global apps_from_db, welcome_video
+    global apps_from_db, welcome_video, events
     apps_from_db = app_dao.get_all()
-    welcome_video = wv_dao.get_all()[0] if wv_dao.get_all() else None
-
+    welcome_video = wv_dao.get_all()[-1] if wv_dao.get_all() else None
     gathering.welcome = welcome_video
     traditional.welcome = welcome_video
+    events = gathering.get_all_events() + traditional.get_all_events()
 
 
 # DISPLAYS

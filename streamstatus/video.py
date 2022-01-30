@@ -4,9 +4,10 @@ import subprocess
 
 class Video:
 
-    def __init__(self, name: str, length: int):
+    def __init__(self, name: str, length: int, filepath: str = None):
         self.name = name
         self.length = length
+        self.filepath = filepath
 
     def __str__(self):
         return f'{self.name} ({self.length})'
@@ -28,10 +29,10 @@ class Video:
                                 stderr=subprocess.STDOUT)
         length = int(float(result.stdout))
 
-        return cls(name, length)
+        return cls(name, length, filepath=path_to_vid)
 
 
 class WelcomeVideo(Video):
 
-    def __init__(self, name: str, length: int):
-        super().__init__(name, length)
+    def __init__(self, name: str, length: int, filepath: str = None):
+        super().__init__(name, length, filepath=filepath)

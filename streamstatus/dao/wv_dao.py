@@ -13,14 +13,15 @@ class WelcomeVideoDao(Dao):
         return welcome_videos
 
     def create(self, wv):
-        self._update_database('INSERT INTO welcome_video (filepath, length) VALUES (?, ?);',
-                              (wv.name, wv.length))
+        self._update_database('INSERT INTO welcome_video (name, length, filepath) VALUES (?, ?, ?);',
+                              (wv.name, wv.length, wv.filepath))
 
     @staticmethod
     def get_obj_from_result(result):
         from streamstatus.video import WelcomeVideo
 
-        wv_name = result['filepath']
+        wv_name = result['name']
         wv_length = int(result['length'])
+        wv_filepath = result['filepath']
 
-        return WelcomeVideo(wv_name, wv_length)
+        return WelcomeVideo(wv_name, wv_length, filepath=wv_filepath)
