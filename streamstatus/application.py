@@ -29,7 +29,7 @@ class Application:
     @property
     def is_up(self):
         try:
-            response = requests.get(self.url, timeout=1)
+            response = requests.get(self.url, timeout=2)
         except OSError:
             return False
 

@@ -69,13 +69,13 @@ a {
 .countdown-danger {
     background-color: blue;
     color: white;
-    animation: blinkingBlueBackground 1s infinite;
+    animation: blinkingBlueBackground 2s infinite;
 }
 
 .countdown-extreme-danger {
     background-color: blue;
     color: white;
-    animation: extremeDanger 0.5s infinite;
+    animation: extremeDanger 1s infinite;
 }
 
 .col-three {
@@ -86,12 +86,16 @@ a {
 
 @keyframes extremeDanger {
     0%      { font-size: 1rem; background-color: blue; }
-    50%     { font-size: 2rem; background-color: black; }
+    25%		{ font-size: 2rem; background-color: black;}
+    50%     { font-size: 1rem; background-color: #d15000; }
+    75%		{ font-size: 2rem; background-color: black;}
 }
 
 @keyframes blinkingBlueBackground{
     0%		{ background-color: blue;}
-    50%		{ background-color: black;}
+    25%		{ background-color: black;}
+    50%		{ background-color: #d15000;}
+    75%		{ background-color: black;}
 }
 
 @keyframes blinkingBackground{
