@@ -32,7 +32,13 @@ class Event:
 
     @property
     def in_extreme_danger_zone(self):
-        return self._seconds_remaining < 10
+        in_extreme_dz = self._seconds_remaining < 10
+
+        if in_extreme_dz:
+            import urllib.request
+            urllib.request.urlopen("http://192.168.2.51:8000/press/bank/98/32")
+
+        return in_extreme_dz
 
     def get_time_remaining(self):
         if self.has_happened:
