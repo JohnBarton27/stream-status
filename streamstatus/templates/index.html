@@ -53,6 +53,18 @@
   </div>
   {% endfor %}
 
+  <h2>Hardware Info</h2>
+  <span style="display: flex; flex-wrap: wrap;">
+  {% for hw in hardware %}
+    <a class="flex-cameras">
+      <div id="hardware.{{hw}}" class="app-status" style="text-align: center;">
+        <span id="hardware.{{hw}}-value" style="font-size: 1.5rem;">0</span>
+        <span style="display: block;">{{ hw }}</span>
+      </div>
+    </a>
+  {% endfor %}
+  </span>
+
   <h2>Cameras</h2>
   <span style="display: flex; flex-wrap: wrap;">
   {% for app in cams %}
@@ -74,6 +86,7 @@
         socket.emit('get_viewers');
         socket.emit('get_cams');
         socket.emit('get_events');
+        socket.emit('get_hardware');
     });
 
     socket.on('broadcast-statuses',function(data){
@@ -182,6 +195,18 @@
         let events_elem = document.getElementById('events');
         events_elem.style.display = 'none';
       }
+
+    });
+
+    socket.on('broadcast-hardware',function(data){
+      let bitrate_elem = document.getElementById('hardware.WebPresenter_Bitrate-value');
+      bitrate_elem.innerHTML = data['bitrate'];
+
+      let cache_elem = document.getElementById('hardware.WebPresenter_Cache-value');
+      cache_elem.innerHTML = data['cache'];
+
+      let state_elem = document.getElementById('hardware.WebPresenter_State-value');
+      state_elem.innerHTML = data['state'];
 
     });
 </script>

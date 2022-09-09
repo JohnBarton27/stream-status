@@ -62,7 +62,10 @@ events = None
 # FROM DATABASE
 apps_from_db = None
 welcome_video = None
-
+hardware = ["WebPresenter_Bitrate", "WebPresenter_Cache", "WebPresenter_State"]
+webpresenter_bitrate = 0
+webpresenter_cache = 0
+webpresenter_state = 0
 
 def update_from_db():
     global apps_from_db, welcome_video, events
@@ -76,7 +79,7 @@ def update_from_db():
 # DISPLAYS
 @app.route("/")
 def index():
-    return render_template("index.html", apps=apps_from_db, streams=streams, cams=cams, events=events)
+    return render_template("index.html", apps=apps_from_db, hardware=hardware, streams=streams, cams=cams, events=events)
 
 
 @app.route("/config")
@@ -125,7 +128,34 @@ def configured_welcome_video():
     return render_template("elements/welcome_video_config.html", welcome_video=welcome_video)
 
 
+@app.route('/api/webpresenter/bitrate/<bitrate>')
+def set_webpresenter_bitrate(bitrate):
+    global webpresenter_bitrate
+    webpresenter_bitrate = f'{round(int(bitrate) / 1000)} kpbs'
+    return 'SUCCESS'
+
+@app.route('/api/webpresenter/cache/<cache>')
+def set_webpresenter_cache(cache):
+    global webpresenter_cache
+    webpresenter_cache = f'{cache}'
+    return 'SUCCESS'
+
+@app.route('/api/webpresenter/state/<state>')
+def set_webpresenter_state(state):
+    global webpresenter_state
+    webpresenter_state = f'{state}'
+    return 'SUCCESS'
+
+
 # SOCKETS
+@socketio.on('get_hardware')
+def handle_hardware():
+    while True:
+        data = {'bitrate': webpresenter_bitrate, 'cache': webpresenter_cache, 'state': webpresenter_state}
+        emit('broadcast-hardware', data, broadcast=True)
+        time.sleep(5)
+
+
 @socketio.on('get_statuses')
 def handle_my_custom_event():
     while True:
@@ -133,7 +163,6 @@ def handle_my_custom_event():
         for application in apps_from_db:
             data[application.app_name] = {'status': application.get_is_healthy(), 'time': application.uptime}
 
-        print(data)
         emit('broadcast-statuses', data, broadcast=True)
         time.sleep(2)
 
@@ -148,7 +177,6 @@ def handle_get_viewers():
                 'viewers': stream.get_current_viewers()
             }
 
-        print(data)
         emit('broadcast-viewers', data, broadcast=True)
         time.sleep(30)
 
@@ -160,7 +188,6 @@ def handle_get_cams():
         for cam in cams:
             data[cam.app_name] = {'status': cam.get_is_healthy(), 'time': cam.uptime}
 
-        print(data)
         emit('broadcast-cams', data, broadcast=True)
         time.sleep(2)
 
@@ -175,7 +202,6 @@ def handle_get_events():
                                 'extreme_danger_zone': event.in_extreme_danger_zone,
                                 'id': event.id}
 
-        print(data)
         emit('broadcast-events', data, broadcast=True)
         time.sleep(1)
 
