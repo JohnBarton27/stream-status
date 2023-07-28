@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stream Status - Checklist</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/checklist.css') }}">
+
+  <script src="{{ url_for('static', filename='js/checklist.js') }}"></script>
+</head>
+
+<body onload="init()">
+<h1><u>Stream Status - Checklist</u></h1>
+    <h2 style="margin-bottom:10px;">Checklist</h2>
+    <div class="checklist">
+        {% for checklist_item in checklist_items %}
+        <div class="checklist-item">
+            <input type="checkbox" id="{{ checklist_item.name }}" onchange="updateCheckboxStatus(this)" {{ "checked" if checklist_item.checked else "" }}>
+            <label for="{{ checklist_item.name }}">{{ checklist_item.name }}</label>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

@@ -9,6 +9,7 @@ from urllib.request import pathname2url
 
 # STREAMSTATUS IMPORTS
 from streamstatus.application import Application
+from streamstatus.checklist_item import ChecklistItem
 from streamstatus.companion import Companion
 from streamstatus.light_factory import LightFactory
 from streamstatus.ndi_cam import NDICam
@@ -67,6 +68,23 @@ webpresenter_bitrate = 0
 webpresenter_cache = 0
 webpresenter_state = 0
 
+# CHECKLIST ITEMS
+checklist_items = []
+checklist_items.append(ChecklistItem('Start OBS'))
+checklist_items.append(ChecklistItem('Start Companion'))
+checklist_items.append(ChecklistItem('Review both Worship Orders'))
+checklist_items.append(ChecklistItem('Download Videos from OneDrive'))
+checklist_items.append(ChecklistItem('Load Videos into OBS'))
+checklist_items.append(ChecklistItem('Setup SPX Titles'))
+checklist_items.append(ChecklistItem('[GATH] Update titles/descriptions in Restream'))
+checklist_items.append(ChecklistItem('[GATH] Confirm PTZ Presets'))
+checklist_items.append(ChecklistItem('[GATH] Setup Podium Camera'))
+checklist_items.append(ChecklistItem('[GATH] Setup Cameras on Stage'))
+checklist_items.append(ChecklistItem('[GATH] Setup Tally Lights'))
+checklist_items.append(ChecklistItem('[TRAD] Update titles/descriptions in Restream'))
+checklist_items.append(ChecklistItem('[TRAD] Confirm PTZ Presets'))
+
+
 def update_from_db():
     global apps_from_db, welcome_video, events
     apps_from_db = app_dao.get_all()
@@ -85,6 +103,11 @@ def index():
 @app.route("/config")
 def config():
     return render_template("config.html", apps=apps_from_db)
+
+
+@app.route("/checklist")
+def checklist():
+    return render_template("checklist.html", checklist_items=checklist_items)
 
 
 # REST API
@@ -134,17 +157,33 @@ def set_webpresenter_bitrate(bitrate):
     webpresenter_bitrate = f'{round(int(bitrate) / 1000)} kpbs'
     return 'SUCCESS'
 
+
 @app.route('/api/webpresenter/cache/<cache>')
 def set_webpresenter_cache(cache):
     global webpresenter_cache
     webpresenter_cache = f'{cache}'
     return 'SUCCESS'
 
+
 @app.route('/api/webpresenter/state/<state>')
 def set_webpresenter_state(state):
     global webpresenter_state
     webpresenter_state = f'{state}'
     return 'SUCCESS'
+
+
+@app.route('/api/update_checkbox_status', methods=['POST'])
+def update_checkbox_status():
+    data = request.get_json()
+    checkbox_id = data.get('id')
+    checked = data.get('checked')
+
+    for checkbox in checklist_items:
+        if checkbox.name == checkbox_id:
+            checkbox.checked = checked
+            return f'Setting {checkbox.name} to {checkbox.checked}'
+
+    return "FAILED TO UPDATE"
 
 
 # SOCKETS
