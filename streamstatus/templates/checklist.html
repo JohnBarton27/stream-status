@@ -20,7 +20,7 @@
         {% for checklist_item in checklist_items %}
         <div class="checklist-item">
             <input type="checkbox" id="{{ checklist_item.name }}" onchange="updateCheckboxStatus(this)" {{ "checked" if checklist_item.checked else "" }}>
-            <label for="{{ checklist_item.name }}">{{ checklist_item.name }}</label>
+            <label id="{{ checklist_item.name }}_LABEL" for="{{ checklist_item.name }}" class="{% if checklist_item.checked %}strikethrough{% endif %}">{{ checklist_item.name }}</label>
         </div>
         {% endfor %}
     </div>

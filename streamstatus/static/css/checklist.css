@@ -1,3 +1,7 @@
 .checklist-item {
     margin-bottom: 10px;
 }
+
+.strikethrough {
+    text-decoration: line-through;
+}
